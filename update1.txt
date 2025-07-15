@@ -1,0 +1,100 @@
+
+You are an expert full-stack developer. We are encountering a critical Module not found: Can't resolve '@/lib/supabaseClient' error in app/settings/page.tsx. This indicates an incorrect import path. Additionally, the History page is not displaying saved audio.
+
+Objective:
+
+    Correct the import path for getSupabaseBrowserClient in app/settings/page.tsx.
+
+    Provide instructions to verify the src/lib/storage.ts and src/types/index.ts files to ensure the History page can correctly load local notes.
+
+Key Instructions  
+
+    Focus purely on these fixes and verifications.
+
+    Provide exact code modifications for app/settings/page.tsx.
+
+Task 1: Correct Import Path in app/settings/page.tsx
+
+    Modify app/settings/page.tsx:
+
+        Locate the import statement for getSupabaseBrowserClient.
+
+        Change the path to import { getSupabaseBrowserClient } from '@/src/lib/supabaseClient';
+    Generated typescript
+
+          
+    // app/settings/page.tsx
+    "use client";
+
+    import { useState, useEffect } from 'react';
+    import { useRouter } from 'next/navigation';
+    import { useAuth } from '@/src/hooks/use-auth';
+    // CRITICAL: Correct the import path for Supabase client
+    import { getSupabaseBrowserClient } from '@/src/lib/supabaseClient'; 
+    import LoadingSpinner from '@/src/components/ui/LoadingSpinner';
+    import { toast } from '@/components/ui/use-toast';
+    import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+    import { Switch } from '@/components/ui/switch';
+    import { Label } from '@/components/ui/label';
+    import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+    import { Button } from '@/components/ui/button';
+    import { Settings, Cloud, Trash2, Trello, CreditCard, Languages, Palette, UserX } from 'lucide-react';
+    import {
+      AlertDialog,
+      AlertDialogAction,
+      AlertDialogCancel,
+      AlertDialogContent,
+      AlertDialogDescription,
+      AlertDialogFooter,
+      AlertDialogHeader,
+      AlertDialogTitle,
+      AlertDialogTrigger,
+    } from "@/components/ui/alert-dialog"
+    import { Input } from '@/components/ui/input';
+
+
+    export default function SettingsPage() {
+      // ... (rest of the file remains the same) ...
+    }
+
+         
+
+Task 2: Verify src/lib/storage.ts and src/types/index.ts for History Page
+
+    Bolt, instruct the user to verify the content of these two files and report back:
+
+        1. src/lib/storage.ts:
+
+            Open src/lib/storage.ts.
+
+            Confirm its content matches the latest correct version (the one that handles saving/loading/deleting AudioRecording objects to/from localStorage, including Base64 audioDataUri).
+
+            Report: Confirm the file content.
+
+        2. src/types/index.ts:
+
+            Open src/types/index.ts.
+
+            Confirm the AudioRecording interface matches the full definition (including audioDataUri, summary, expandedTranscription, projectPlan, actionItems, tags, isArchived, priority).
+        
+
+              
+        // src/types/index.ts - Check if AudioRecording matches this
+        export interface AudioRecording {
+            id: string; // Unique ID for the recording
+            name: string; // Title (can be default or AI-generated)
+            transcription: string | null; // Full text transcription
+            audioDataUri: string; // Base64 encoded audio data (critical for local storage)
+            duration: number; // Duration in seconds
+            date: string; // ISO date string of creation (e.g., new Date().toISOString())
+            summary: string | null; // AI-generated summary
+            expandedTranscription: string | null; // AI-expanded text
+            projectPlan: string | null; // AI-generated project plan
+            actionItems: string | null; // AI-extracted action items
+            tags?: string[]; // Optional array of tags (for future use/local filtering)
+            isArchived: boolean; // Default to false
+            priority: 'low' | 'medium' | 'high'; // Default to 'medium'
+        }
+        // ... (other interfaces like UserProfile should also be present) ...
+
+            
