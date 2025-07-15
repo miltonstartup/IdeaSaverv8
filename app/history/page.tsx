@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
@@ -54,21 +54,23 @@ export default function HistoryPage() {
   const handleDeleteNote = (noteId: string) => {
     if (!user) return;
     
-    try {
-      deleteRecordingLocally(user.id, noteId);
-      setNotes(prevNotes => prevNotes.filter(note => note.id !== noteId));
-      toast({ 
-        title: "Note Deleted", 
-        description: "The note has been removed from your device." 
-      });
-      // TODO: If Cloud Sync is enabled, also delete from Supabase
-    } catch (error) {
-      console.error("Error deleting note locally:", error);
-      toast({ 
-        title: "Deletion Failed", 
-        description: "Could not delete the note.", 
-        variant: "destructive" 
-      });
+    if (window.confirm("Are you sure you want to delete this note? This action cannot be undone.")) {
+      try {
+        deleteRecordingLocally(user.id, noteId);
+        setNotes(prevNotes => prevNotes.filter(note => note.id !== noteId));
+        toast({ 
+          title: "Note Deleted", 
+          description: "The note has been removed from your device." 
+        });
+        // TODO: If Cloud Sync is enabled, also delete from Supabase
+      } catch (error) {
+        console.error("Error deleting note locally:", error);
+        toast({ 
+          title: "Deletion Failed", 
+          description: "Could not delete the note.", 
+          variant: "destructive" 
+        });
+      }
     }
   };
 

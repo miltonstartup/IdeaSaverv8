@@ -1,4 +1,3 @@
-// app/settings/page.tsx
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -12,7 +11,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Button } from '@/components/ui/button';
-import { Settings, Cloud, Trash2, Trello, CreditCard, Languages, Palette, UserX } from 'lucide-react'; // Added UserX for delete account
+import { Settings, Cloud, Trash2, Trello, CreditCard, Languages, Palette, UserX } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,21 +22,20 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog" // Shadcn AlertDialog for delete confirmation
-import { Input } from '@/components/ui/input'; // For email confirmation in delete
-
+} from "@/components/ui/alert-dialog"
+import { Input } from '@/components/ui/input';
 
 export default function SettingsPage() {
-  const { user, profile, isLoading, updateCredits, signOut, refetchProfile } = useAuth(); // Destructure refetchProfile
+  const { user, profile, isLoading, updateCredits, signOut, refetchProfile } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
 
   // --- Local state for settings (initialized from profile) ---
   const [cloudSyncEnabled, setCloudSyncEnabled] = useState(false);
   const [autoCloudSync, setAutoCloudSync] = useState(false);
-  const [deletionPolicy, setDeletionPolicy] = useState('never'); // 'never', '7', '15', '30'
+  const [deletionPolicy, setDeletionPolicy] = useState('never');
   const [isSaving, setIsSaving] = useState(false);
-  const [deleteConfirmEmail, setDeleteConfirmEmail] = useState(''); // For account deletion confirmation
+  const [deleteConfirmEmail, setDeleteConfirmEmail] = useState('');
 
   // --- Initialize local state from profile once loaded ---
   useEffect(() => {
@@ -47,7 +45,6 @@ export default function SettingsPage() {
       setDeletionPolicy(profile.deletion_policy_days === 0 ? 'never' : String(profile.deletion_policy_days));
     }
   }, [profile]);
-
 
   // --- Defensive loading and authentication check ---
   useEffect(() => {
@@ -74,7 +71,6 @@ export default function SettingsPage() {
     setIsSaving(true);
     try {
       console.log("Saving settings for user:", user.id, { cloudSyncEnabled, autoCloudSync, deletionPolicy });
-      // CRITICAL: Update profile in Supabase
       const { error } = await getSupabaseBrowserClient()
         .from('profiles')
         .update({
@@ -89,7 +85,7 @@ export default function SettingsPage() {
         toast({ title: "Error", description: error.message || "Failed to save settings.", variant: "destructive" });
       } else {
         console.log("Settings saved successfully to DB. Refetching profile.");
-        await refetchProfile(); // CRITICAL: Refetch profile to sync local state
+        await refetchProfile();
         toast({ title: "Success!", description: "Settings saved successfully.", variant: "default" });
       }
     } catch (error: any) {
@@ -109,20 +105,13 @@ export default function SettingsPage() {
 
     console.log("Attempting to delete account for:", user.id);
     try {
-      // This requires Supabase service role or a server-side function/API route
-      // Supabase client-side delete is usually restricted for security
-      // For now, it will be a placeholder toast.
       toast({ title: "Coming Soon!", description: "Actual account deletion requires server-side logic.", variant: "default" });
       console.log("Account deletion logic is a placeholder.");
-      // In a real app, this would call an API route that uses adminClientInstance.auth.admin.deleteUser(userId)
-      // and then deletes their profile/notes from DB.
-      // await signOut(); // Sign out locally after server-side deletion
     } catch (error: any) {
       console.error("Error deleting account:", error);
       toast({ title: "Error", description: error.message || "Failed to delete account.", variant: "destructive" });
     }
   };
-
 
   // --- Main Settings Page Content ---
   const isProUser = profile.has_purchased_app || profile.current_plan === 'full_app_purchase';
@@ -259,7 +248,7 @@ export default function SettingsPage() {
         {/* Account Settings / Danger Zone Card */}
         <Card className="bg-dark-secondary-bg border-red-500 rounded-xl shadow-lg">
           <CardHeader>
-            <CardTitle className="text-red-500 flex items-center"><UserX className="w-5 h-5 mr-2" /> Danger Zone</CardTitle> {/* Changed icon to UserX */}
+            <CardTitle className="text-red-500 flex items-center"><UserX className="w-5 h-5 mr-2" /> Danger Zone</CardTitle>
             <CardDescription className="text-dark-text-muted">
               These actions are permanent and cannot be undone.
             </CardDescription>
@@ -269,7 +258,6 @@ export default function SettingsPage() {
               <AlertDialogTrigger asChild>
                 <Button 
                   className="bg-red-500 text-dark-text-light rounded-lg hover:bg-red-600 transition-colors"
-                  // onClick={() => toast({ title: "Confirmation Needed", description: "Deleting account is a multi-step process. Coming Soon!", variant: "destructive" })}
                 >
                   Delete My Account
                 </Button>
@@ -293,7 +281,7 @@ export default function SettingsPage() {
                   <AlertDialogCancel className="bg-dark-tertiary-bg text-dark-text-muted rounded-lg hover:bg-dark-border-subtle">Cancel</AlertDialogCancel>
                   <AlertDialogAction 
                     onClick={handleDeleteAccount} 
-                    disabled={profile?.email !== deleteConfirmEmail || isSaving} // Use isSaving for loading state
+                    disabled={profile?.email !== deleteConfirmEmail || isSaving}
                     className="bg-red-500 text-dark-text-light rounded-lg hover:bg-red-600"
                   >
                     {isSaving ? 'Deleting...' : 'Delete Account'}
@@ -314,7 +302,6 @@ export default function SettingsPage() {
             {isSaving ? 'Saving...' : 'Save Changes'}
           </Button>
         </div>
-
       </div>
     </div>
   );

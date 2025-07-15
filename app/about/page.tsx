@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { motion } from 'framer-motion';
 import { Linkedin, Mail, Code, ExternalLink, Lightbulb, Heart, Sparkles } from 'lucide-react';

@@ -220,14 +220,14 @@ export default function Header() {
                       </div>
                     )}
                     <div>
-                        {authLoading || !profile ? '...' : profile.credits.toLocaleString()}
+                      <p className="text-sm font-medium text-foreground truncate max-w-[150px]">{user.name || user.email}</p>
                       <p className="text-xs text-muted-foreground truncate max-w-[150px]">{user.email}</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2 px-2 py-1 bg-gradient-to-r from-accent-purple/10 to-accent-blue/10 border border-primary/20 rounded-lg">
                     <Coins className="w-3 h-3 text-primary" />
                     <span className="text-xs font-semibold text-foreground">
-                      {profile ? profile.credits.toLocaleString() : '0'}
+                      {authLoading || !profile ? '...' : profile.credits.toLocaleString()}
                     </span>
                   </div>
                 </div>
