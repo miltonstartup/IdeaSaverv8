@@ -1,16 +1,17 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/src/hooks/use-auth';
-import { getSupabaseBrowserClient } from '@/src/lib/supabaseClient'; // FIXED: Correct path
-import { useToast } from '@/hooks/use-toast'; // FIXED: Correct Shadcn toast import
-import { Check, Star, Gift, DollarSign, Wallet, Gem } from 'lucide-react'; // Lucide icons
+import { getSupabaseBrowserClient } from '@/src/lib/supabaseClient';
+import { useToast } from '@/hooks/use-toast';
+import { Check, Star, Gift, DollarSign, Wallet, Gem } from 'lucide-react';
+import Link from 'next/link';
 
 export default function PricingPage() {
-  const { user, profile, isLoading, updateCredits, refetchProfile } = useAuth(); // CRITICAL: Get refetchProfile
+  const { user, profile, isLoading, updateCredits, refetchProfile } = useAuth();
   const router = useRouter();
-  const { toast } = useToast(); // Initialize useToast hook
+  const { toast } = useToast();
 
   const [giftCode, setGiftCode] = useState('');
   const [isRedeeming, setIsRedeeming] = useState(false);
@@ -160,9 +161,9 @@ export default function PricingPage() {
           Unlock Your Potential: A Guide to Idea Saver Credits
         </p>
         {/* Link to How Credits Work page */}
-        <a href="/credits" className="text-accent-purple hover:underline text-sm font-semibold">
+        <Link href="/credits" className="text-accent-purple hover:underline text-sm font-semibold">
           How do AI Credits work?
-        </a>
+        </Link>
       </div>
 
       {/* Conditional Plan Display Section */}
@@ -267,7 +268,32 @@ export default function PricingPage() {
               Buy Now (Coming Soon!)
             </button>
           </div>
-          {/* Add more credit packs here if needed */}
+          {/* 500 Credits */}
+          <div className="bg-dark-secondary-bg p-6 rounded-xl shadow-lg flex flex-col items-center">
+            <Gem className="h-8 w-8 text-yellow-400 mb-3" />
+            <h3 className="text-xl font-bold mb-2">500 Credits</h3>
+            <p className="text-dark-text-light text-lg mb-4">$19.99 USD</p>
+            <button
+              onClick={() => toast({ title: "Coming Soon!", description: "Credit pack purchases are under development." })}
+              className="bg-dark-tertiary-bg text-dark-text-muted font-semibold py-2 px-6 rounded-lg w-full"
+              disabled
+            >
+              Buy Now (Coming Soon!)
+            </button>
+          </div>
+          {/* 2000 Credits */}
+          <div className="bg-dark-secondary-bg p-6 rounded-xl shadow-lg flex flex-col items-center">
+            <Gem className="h-8 w-8 text-yellow-400 mb-3" />
+            <h3 className="text-xl font-bold mb-2">2000 Credits</h3>
+            <p className="text-dark-text-light text-lg mb-4">$59.99 USD</p>
+            <button
+              onClick={() => toast({ title: "Coming Soon!", description: "Credit pack purchases are under development." })}
+              className="bg-dark-tertiary-bg text-dark-text-muted font-semibold py-2 px-6 rounded-lg w-full"
+              disabled
+            >
+              Buy Now (Coming Soon!)
+            </button>
+          </div>
         </div>
       </div>
 
