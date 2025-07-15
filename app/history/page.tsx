@@ -25,7 +25,6 @@ export default function HistoryPage() {
   const [filter, setFilter] = useState('all');
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
 
-  // --- Defensive loading and authentication check ---
   useEffect(() => {
     if (!isLoading && !user) {
       console.log('HistoryPage: Not authenticated, redirecting to /login...');
@@ -33,7 +32,6 @@ export default function HistoryPage() {
     }
   }, [user, isLoading, router]);
 
-  // --- Load notes from local storage ---
   useEffect(() => {
     if (user && profile && !isLoading) {
       try {
@@ -50,7 +48,6 @@ export default function HistoryPage() {
     }
   }, [user, profile, isLoading, toast]);
 
-  // --- Function to handle note deletion ---
   const handleDeleteNote = (noteId: string) => {
     if (!user) return;
     
@@ -62,7 +59,6 @@ export default function HistoryPage() {
           title: "Note Deleted", 
           description: "The note has been removed from your device." 
         });
-        // TODO: If Cloud Sync is enabled, also delete from Supabase
       } catch (error) {
         console.error("Error deleting note locally:", error);
         toast({ 
@@ -74,16 +70,13 @@ export default function HistoryPage() {
     }
   };
 
-  // --- Function to handle editing note (placeholder) ---
   const handleEditNote = (noteId: string) => {
-    // This would open a modal or navigate to an edit page
     toast({ 
       title: "Coming Soon!", 
       description: "Note editing is under development." 
     });
   };
 
-  // --- Function to handle playing audio (placeholder) ---
   const handlePlayAudio = (audioDataUri: string | undefined) => {
     if (audioDataUri) {
       const audio = new Audio(audioDataUri);
@@ -103,7 +96,6 @@ export default function HistoryPage() {
     }
   };
 
-  // Filtered notes logic (basic search)
   const filteredNotes = notes.filter(note =>
     note.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (note.transcription && note.transcription.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -121,7 +113,6 @@ export default function HistoryPage() {
     );
   }
 
-  // --- Main History Page Content ---
   return (
     <div className="min-h-screen bg-dark-primary-bg text-dark-text-light py-10 px-4 flex flex-col items-center">
       <div className="text-center mb-10 max-w-2xl w-full">
@@ -131,7 +122,6 @@ export default function HistoryPage() {
         </p>
       </div>
 
-      {/* Search and Filter Section */}
       <div className="flex flex-col sm:flex-row gap-4 mb-8 w-full max-w-xl">
         <div className="flex-grow relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-dark-text-muted" />
@@ -153,7 +143,6 @@ export default function HistoryPage() {
         </Button>
       </div>
 
-      {/* Notes List */}
       <div className="w-full max-w-xl space-y-4">
         {filteredNotes.length === 0 ? (
           <Card className="bg-dark-secondary-bg border-dark-border-subtle rounded-xl shadow-lg">

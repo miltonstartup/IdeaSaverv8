@@ -30,14 +30,12 @@ export default function SettingsPage() {
   const router = useRouter();
   const { toast } = useToast();
 
-  // --- Local state for settings (initialized from profile) ---
   const [cloudSyncEnabled, setCloudSyncEnabled] = useState(false);
   const [autoCloudSync, setAutoCloudSync] = useState(false);
   const [deletionPolicy, setDeletionPolicy] = useState('never');
   const [isSaving, setIsSaving] = useState(false);
   const [deleteConfirmEmail, setDeleteConfirmEmail] = useState('');
 
-  // --- Initialize local state from profile once loaded ---
   useEffect(() => {
     if (profile) {
       setCloudSyncEnabled(profile.cloud_sync_enabled);
@@ -46,7 +44,6 @@ export default function SettingsPage() {
     }
   }, [profile]);
 
-  // --- Defensive loading and authentication check ---
   useEffect(() => {
     if (!isLoading && !user) {
       console.log('SettingsPage: Not authenticated, redirecting to /login...');
@@ -65,7 +62,6 @@ export default function SettingsPage() {
     );
   }
 
-  // --- Handle Save Changes ---
   const handleSaveChanges = async () => {
     if (!user || !profile) return;
     setIsSaving(true);
@@ -96,7 +92,6 @@ export default function SettingsPage() {
     }
   };
 
-  // --- Handle Delete Account ---
   const handleDeleteAccount = async () => {
     if (!user || !profile || profile.email !== deleteConfirmEmail) {
       toast({ title: "Error", description: "Email does not match or user not found.", variant: "destructive" });
@@ -113,7 +108,6 @@ export default function SettingsPage() {
     }
   };
 
-  // --- Main Settings Page Content ---
   const isProUser = profile.has_purchased_app || profile.current_plan === 'full_app_purchase';
 
   return (
@@ -126,7 +120,6 @@ export default function SettingsPage() {
       </div>
 
       <div className="w-full max-w-2xl space-y-8">
-        {/* Plan & Credits Card */}
         <Card className="bg-dark-secondary-bg border-dark-border-subtle rounded-xl shadow-lg">
           <CardHeader>
             <CardTitle className="text-dark-text-light flex items-center"><CreditCard className="w-5 h-5 mr-2" /> Plan & Credits</CardTitle>
@@ -146,7 +139,6 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
 
-        {/* Data & Sync Card */}
         <Card className="bg-dark-secondary-bg border-dark-border-subtle rounded-xl shadow-lg">
           <CardHeader>
             <CardTitle className="text-dark-text-light flex items-center"><Cloud className="w-5 h-5 mr-2" /> Data & Sync</CardTitle>
@@ -155,7 +147,6 @@ export default function SettingsPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Cloud Sync Toggle */}
             <div className="flex items-center justify-between">
               <Label htmlFor="cloud-sync" className="text-dark-text-light flex items-center">
                 Enable Cloud Sync
@@ -185,7 +176,6 @@ export default function SettingsPage() {
               </div>
             )}
 
-            {/* Auto-Delete Notes */}
             <div className="space-y-2">
               <Label className="text-dark-text-light flex items-center"><Trash2 className="w-5 h-5 mr-2" /> Auto-Delete Notes</Label>
               <CardDescription className="text-dark-text-muted">
@@ -211,7 +201,6 @@ export default function SettingsPage() {
               </RadioGroup>
             </div>
 
-            {/* Local Storage Management (Placeholder) */}
             <div className="text-center mt-6">
               <Button 
                 className="bg-dark-tertiary-bg text-dark-text-muted rounded-lg hover:bg-dark-secondary-bg transition-colors"
@@ -223,7 +212,6 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
 
-        {/* Trello Integration Card (Placeholder) */}
         <Card className="bg-dark-secondary-bg border-dark-border-subtle rounded-xl shadow-lg">
           <CardHeader>
             <CardTitle className="text-dark-text-light flex items-center"><Trello className="w-5 h-5 mr-2" /> Trello Integration</CardTitle>
@@ -245,7 +233,6 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
 
-        {/* Account Settings / Danger Zone Card */}
         <Card className="bg-dark-secondary-bg border-red-500 rounded-xl shadow-lg">
           <CardHeader>
             <CardTitle className="text-red-500 flex items-center"><UserX className="w-5 h-5 mr-2" /> Danger Zone</CardTitle>
@@ -292,7 +279,6 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
 
-        {/* Save Changes Button */}
         <div className="text-center mt-8">
           <Button 
             className="bg-accent-purple text-dark-text-light rounded-lg hover:opacity-90 transition-opacity"
